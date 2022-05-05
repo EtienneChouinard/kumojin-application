@@ -84,7 +84,7 @@ function Liste()
   
   var stringListeEvenements = "";
   //alert(data[0].nom);
-  /*
+  
   for (var i = 0, length = data.length; i < length; i++)
   {
     
@@ -111,7 +111,7 @@ function Liste()
     //console.log("Nom: ", evenements[i].nom);
     //console.log("Date: ", evenements[i].date);
   }
-  */
+  
   //alert(stringListeEvenements);
   //alert(data[0].nom);
 
