@@ -1,0 +1,29 @@
+[
+  {
+    "nom": "Festival d'été de Québec",
+    "date": "2022/07/07",
+    "heure": "20:00",
+    "timezone": "Eastern Standard Time",
+    "offset": -5,
+    "description": "Insert description here",
+    "siteWeb": "www.google.ca"
+  },
+  {
+    "nom": "Festival d'hiver de Québec",
+    "date": "2022/01/07",
+    "heure": "20:00",
+    "timezone": "Eastern Standard Time",
+    "offset": -5,
+    "description": "Insert description here",
+    "siteWeb": "www.google.ca"
+  },
+  {
+    "nom": "Festival d'automne de Québec",
+    "date": "2022/11/07",
+    "heure": "20:00",
+    "timezone": "Eastern Standard Time",
+    "offset": -5,
+    "description": "Insert description here",
+    "siteWeb": "www.google.ca"
+  }
+]
