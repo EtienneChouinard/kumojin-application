@@ -83,7 +83,7 @@ function Liste()
   }, []);
   
   var stringListeEvenements = "";
-  
+  /*
   for (var i = 0, length = data.length; i < length; i++)
   {
     
@@ -108,7 +108,7 @@ function Liste()
     stringListeEvenements = stringListeEvenements + "</ul></li>"
     
   }
-  
+  */
 
   return (<div className='liste'>
   <main>
