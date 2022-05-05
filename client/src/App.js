@@ -83,7 +83,6 @@ function Liste()
   }, []);
   
   var stringListeEvenements = "";
-  //alert(data[0].nom);
   
   for (var i = 0, length = data.length; i < length; i++)
   {
@@ -108,16 +107,10 @@ function Liste()
     
     stringListeEvenements = stringListeEvenements + "</ul></li>"
     
-    //console.log("Nom: ", evenements[i].nom);
-    //console.log("Date: ", evenements[i].date);
   }
   
-  //alert(stringListeEvenements);
-  //alert(data[0].nom);
 
-  //<p>{!stringListeEvenements ? "Loading..." : stringListeEvenements}</p>
-  //
-  var AAA = (<div className='liste'>
+  return (<div className='liste'>
   <main>
     <h2>Liste Évenements</h2>
     
@@ -134,8 +127,6 @@ function Liste()
     <div id="prefooter"></div>
   </main>
 </div>);
-
-  return (AAA);
 }
 
 function Creer()
