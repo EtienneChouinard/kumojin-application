@@ -83,32 +83,38 @@ function Liste()
   }, []);
   
   var stringListeEvenements = "";
-  /*
-  for (var i = 0, length = data.length; i < length; i++)
+  //Insérer/Retirer "/*" ici vvvvvv
+  
+  if (data)
   {
-    
-    var evenementNom = data[i].nom;
-    var evenementHeureQuebec = data[i].heure;
-    var evenementDate = data[i].date;
-    var evenementHeureLocale = data[i].heure;
-    var evenementTimezone = data[i].timezone;
-    //var evenementOffset = data[i].offset;
-    var evenementDescription = data[i].description;
-    var evenementsiteWeb = data[i].siteWeb;
+    for (var i = 0, length = data.length; i < length; i++)
+    {
+      
+      var evenementNom = data[i].nom;
+      var evenementHeureQuebec = data[i].heure;
+      var evenementDate = data[i].date;
+      var evenementHeureLocale = data[i].heure;
+      var evenementTimezone = data[i].timezone;
+      //var evenementOffset = data[i].offset;
+      var evenementDescription = data[i].description;
+      var evenementsiteWeb = data[i].siteWeb;
 
-    stringListeEvenements = stringListeEvenements + "<li><div class='evenement'>"
-    stringListeEvenements = stringListeEvenements + "<p>Nom: " + evenementNom + "</p>"
-    stringListeEvenements = stringListeEvenements + "<p>Heure (Québec): " + evenementHeureQuebec + "</p>"
-    stringListeEvenements = stringListeEvenements + "<p>Date: " + evenementDate + "</p>"
-    stringListeEvenements = stringListeEvenements + "<p>Heure (Locale): " + evenementHeureLocale + "</p>"
-    stringListeEvenements = stringListeEvenements + "<p>Fuseau horaire local: " + evenementTimezone + "</p>"
-    stringListeEvenements = stringListeEvenements + "<p>Description: " + evenementDescription + "</p>"
-    stringListeEvenements = stringListeEvenements + "<p>Site web: " + evenementsiteWeb + "</p>"
-    
-    stringListeEvenements = stringListeEvenements + "</ul></li>"
-    
+      stringListeEvenements = stringListeEvenements + "<li><div class='evenement'>"
+      stringListeEvenements = stringListeEvenements + "<p>Nom: " + evenementNom + "</p>"
+      stringListeEvenements = stringListeEvenements + "<p>Heure (Québec): " + evenementHeureQuebec + "</p>"
+      stringListeEvenements = stringListeEvenements + "<p>Date: " + evenementDate + "</p>"
+      stringListeEvenements = stringListeEvenements + "<p>Heure (Locale): " + evenementHeureLocale + "</p>"
+      stringListeEvenements = stringListeEvenements + "<p>Fuseau horaire local: " + evenementTimezone + "</p>"
+      stringListeEvenements = stringListeEvenements + "<p>Description: " + evenementDescription + "</p>"
+      stringListeEvenements = stringListeEvenements + "<p>Site web: " + evenementsiteWeb + "</p>"
+      
+      stringListeEvenements = stringListeEvenements + "</ul></li>"
+      
+    }
   }
-  */
+  
+  
+   //Insérer/Retirer "*/" ici ^^^^^^
 
   return (<div className='liste'>
   <main>
