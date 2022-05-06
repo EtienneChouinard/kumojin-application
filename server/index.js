@@ -4,6 +4,7 @@ const express = require("express");
 const timezones = require("./timezone.JSON");
 const fs = require("fs");
 const { stringify } = require('querystring');
+const res = require('express/lib/response');
 
 const PORT = process.env.PORT || 3001;
 
@@ -44,15 +45,6 @@ app.get("/api/liste", (req, res) =>
     }
     try
     {
-      /*var stringListeEvenements = "";
-      for (var i = 0, length = evenements.length; i < length; i++)
-      {
-        stringListeEvenements = stringListeEvenements + "<li>" + evenements[i].nom + "</li>"
-        
-        console.log("Nom: ", evenements[i].nom);
-        //console.log("Date: ", evenements[i].date);
-      }
-      console.log(evenements);*/
       res.json({ message: evenements });
     }
     catch (err)
@@ -63,10 +55,10 @@ app.get("/api/liste", (req, res) =>
   });
 })
 
-app.get("/api", (req, res) => 
+app.get("/api/creer", (req, res) => 
 {
   //Read
-  jsonReader("./server/evenements.JSON", (err, evenements) => 
+  jsonReader("./server/timezone.JSON", (err, timezones) => 
   {
     if (err) 
     {
@@ -75,16 +67,7 @@ app.get("/api", (req, res) =>
     }
     try
     {
-      var stringListeEvenements = "";
-      for (var i = 0, length = evenements.length; i < length; i++)
-      {
-        stringListeEvenements = stringListeEvenements + "<li>" + evenements[i].nom + "</li>"
-        
-        console.log("Nom: ", evenements[i].nom);
-        //console.log("Date: ", evenements[i].date);
-      }
-      console.log(stringListeEvenements);
-      res.json({ message: "evenements" });
+      res.json({ message: timezones });
     }
     catch (err)
     {
@@ -95,103 +78,51 @@ app.get("/api", (req, res) =>
 
 });
 
-// Handle GET requests to /api route
-app.get("/api/Test", (req, res) => 
+app.get("/api/creerEvenement", (req,res) =>
 {
   
-  const newEvenementTest =
+  //Append
+  const newEvenement =
   {
-    nom: "Festival d'automne de Québec",
+    nom: "Événement créé automatiquement via debug",
     date: "2022/07/07",
     heure: "20:00",
     timezone: "Eastern Standard Time",
     offset: -5,
-    description: "Insert description here"
+    description: "Insert description here",
+    siteWeb: "www.google.ca"
   }
 
-  //Read
-  jsonReader("./server/evenements.JSON", (err, evenements) => 
+  res.json({ message: "Test" });
+
+  //Mettre à true pour effectuer l'ajout d'un événement
+  if (false)
   {
-    if (err) 
+    jsonReader("./server/evenements.JSON", (err, evenements) => 
     {
-      console.log(err);
-      return;
-    }
-    try
-    {
-      var stringListeEvenements = "";
-      for (var i = 0, length = evenements.length; i < length; i++)
+      if (err) 
       {
-        stringListeEvenements = stringListeEvenements + "<li>" + evenements[i].nom + "</li>"
-        
-        console.log("Nom: ", evenements[i].nom);
-        //console.log("Date: ", evenements[i].date);
+        console.log(err);
+        return;
       }
-      console.log(stringListeEvenements);
-      res.json({ message: "stringListeEvenements" });
-    }
-    catch (err)
-    {
-      console.log("Error parsing JSON", err);
-    }
-    
-  });
-  
-  
-
-  //Append
-  /*
-  jsonReader("./server/evenements.JSON", (err, evenements) => 
-  {
-    if (err) 
-    {
-      console.log(err);
-      return;
-    }
-    try
-    {
-      evenements.push(newEvenementTest);    
-      fs.writeFile("./server/evenements.JSON", JSON.stringify(evenements, null, 2), function(err)
+      try
       {
-        if (err) throw err;
-        console.log('The "data to append" was appended to file!');
-      });
-    }
-    catch (err)
-    {
-      console.log("Error parsing JSON", err);
-    }
-  })
-  */
-  /*
-  const customer = 
-  {
-    name: "Newbie Corp2.",
-    order_count: 3,
-    address: "Po Box City+"
-  };
-  const customer2 = 
-  {
-    name: "Newbie Corp3.",
-    order_count: 4,
-    address: "Po Box City++"
-  };
+        evenements.push(newEvenement);    
+        fs.writeFile("./server/evenements.JSON", JSON.stringify(evenements, null, 2), function(err)
+        {
+          if (err) throw err;
+          console.log('The "data to append" was appended to file!');
+        });
+      }
+      catch (err)
+      {
+        console.log("Error parsing JSON", err);
+      }
+    })
+  }
   
-
-  const jsonString2 = JSON.stringify(customer, null, 2)
-  fs.writeFile('./server/test.json', jsonString2, err => 
-  {
-    if (err) 
-    {
-        console.log('Error writing file', err)
-    } else 
-    {
-        console.log('Successfully wrote file')
-    }
-  })
-  */
+  
 });
-
 
 // All other GET requests not handled before will return our React app
 app.get('*', (req, res) => {
