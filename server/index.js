@@ -1,6 +1,8 @@
 // server/index.js
 const path = require('path');
 const express = require("express");
+const logger = require('morgan');
+const cors = require('cors');
 const timezones = require("./timezone.JSON");
 const fs = require("fs");
 const { stringify } = require('querystring');
@@ -9,6 +11,19 @@ const res = require('express/lib/response');
 const PORT = process.env.PORT || 3001;
 
 const app = express();
+
+//use cors to allow cross origin resource sharing
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+  })
+);
+
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
 
 function jsonReader(filePath, cb) 
 {
@@ -53,7 +68,7 @@ app.get("/api/liste", (req, res) =>
     }
     
   });
-})
+});
 
 app.get("/api/creer", (req, res) => 
 {
@@ -78,25 +93,24 @@ app.get("/api/creer", (req, res) =>
 
 });
 
-app.get("/api/creerEvenement", (req,res) =>
+app.post("/api/create", (req,res) =>
 {
-  
+  console.log(req.body.evenementName);
   //Append
   const newEvenement =
   {
-    nom: "Événement créé automatiquement via debug",
-    date: "2022/07/07",
-    heure: "20:00",
-    timezone: "Eastern Standard Time",
-    offset: -5,
-    description: "Insert description here",
-    siteWeb: "www.google.ca"
+    nom: req.body.evenementName,
+    date: req.body.evenementDate,
+    heure: req.body.evenementHour,
+    timezone: req.body.evenementTimezone,
+    
+    dateHeureQuebec: req.body.evenementDateHourQuebec,
+    description: req.body.evenementDescription,
+    siteWeb: req.body.evenementWebsite,
   }
 
-  res.json({ message: "Test" });
-
   //Mettre à true pour effectuer l'ajout d'un événement
-  if (false)
+  if (true)
   {
     jsonReader("./server/evenements.JSON", (err, evenements) => 
     {
@@ -120,8 +134,6 @@ app.get("/api/creerEvenement", (req,res) =>
       }
     })
   }
-  
-  
 });
 
 // All other GET requests not handled before will return our React app

@@ -1,29 +1,20 @@
 [
   {
     "nom": "Festival d'été de Québec",
-    "date": "2022/07/07",
-    "heure": "20:00",
-    "timezone": "Eastern Standard Time",
-    "offset": -5,
-    "description": "Insert description here",
-    "siteWeb": "www.google.ca"
+    "date": "2022-07-11",
+    "heure": "10:00",
+    "timezone": "-4: EDT - (UTC-04:00) Eastern Daylight Time (US & Canada)",
+    "dateHeureQuebec": "Mon Jul 11 2022 10:00:00 GMT-0400 (Eastern Daylight Saving Time)",
+    "description": "Party!",
+    "siteWeb": "https://www.feq.ca/"
   },
   {
-    "nom": "Festival d'hiver de Québec",
-    "date": "2022/01/07",
-    "heure": "20:00",
-    "timezone": "Eastern Standard Time",
-    "offset": -5,
-    "description": "Insert description here",
-    "siteWeb": "www.google.ca"
-  },
-  {
-    "nom": "Festival d'automne de Québec",
-    "date": "2022/11/07",
-    "heure": "20:00",
-    "timezone": "Eastern Standard Time",
-    "offset": -5,
-    "description": "Insert description here",
-    "siteWeb": "www.google.ca"
+    "nom": "Match de hockey",
+    "date": "2022-05-18",
+    "heure": "19:00",
+    "timezone": "-7: PDT - (UTC-07:00) Pacific Daylight Time (US & Canada)",
+    "dateHeureQuebec": "2022-05-18 22h 00",
+    "description": "Go Canucks Go!",
+    "siteWeb": "www.nhl.com"
   }
 ]

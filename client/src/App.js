@@ -2,6 +2,7 @@ import React from "react";
 import "./App.css";
 import { NavLink, Routes, Route } from 'react-router-dom';
 import Parser from 'html-react-parser';
+import axios from 'axios';
 
 const App = () => (
   <div className='app'>
@@ -18,7 +19,6 @@ const Navigation = () => (
       <NavLink exact activeClassName="current" to='/'>Accueil</NavLink>
       <NavLink exact activeClassName="current" to='/liste'>Liste événements</NavLink>
       <NavLink exact activeClassName="current" to='/creer'>Créer événement</NavLink>
-      <NavLink exact activeClassName="current" to='/creerEvenement'>Créer événement automatiquement via Backend REST API</NavLink>
       
     </nav>
   </header>
@@ -41,30 +41,6 @@ const Home = () => (
     </main>
   </div>
 );
-
-function CreerEvenement()
-{
-  const [data, setData] = React.useState(null);
-
-  React.useEffect(() => {
-    fetch("/api/creerEvenement")
-      .then((res) => res.json())
-      .then((data) => setData(data.message));
-  }, []);
-
-  return (<div className='creerEvenement'>
-  <main>
-    <h2>Page débug - Creer un Evenement</h2>
-    <p>Cette page appelle un REST API qui ajoute un événement.</p>
-    <p>Malheureusement, je n'ai pas eu le temps pour soumettre des données au REST API via un formulaire en ReactNodeJS</p>
-    <p>Mais au moins, je peux créer une nouvelle entrée dans un fichier JSON à partir du backend.</p>
-    <p>{!data ? "Loading..." : data}</p>
-    <p><NavLink exact activeClassName="current" to='/liste'>Liste événements</NavLink></p>
-    <div id="prefooter"></div>
-  </main>
-</div>);
-}
-
 
 function Liste()
 {
@@ -116,20 +92,19 @@ function Liste()
     {
       
       var evenementNom = data[i].nom;
-      var evenementHeureQuebec = data[i].heure;
+      var evenementDateHeureQuebec = data[i].dateHeureQuebec;
       var evenementDate = data[i].date;
       var evenementHeureLocale = data[i].heure;
       var evenementTimezone = data[i].timezone;
-      //var evenementOffset = data[i].offset;
       var evenementDescription = data[i].description;
       var evenementsiteWeb = data[i].siteWeb;
 
       stringListeEvenements = stringListeEvenements + "<li><div class='evenement'>";
       stringListeEvenements = stringListeEvenements + "<p>Nom: " + evenementNom + "</p>";
-      stringListeEvenements = stringListeEvenements + "<p>Heure (Québec): " + evenementHeureQuebec + "</p>";
       stringListeEvenements = stringListeEvenements + "<p>Date: " + evenementDate + "</p>";
       stringListeEvenements = stringListeEvenements + "<p>Heure (Locale): " + evenementHeureLocale + "</p>";
       stringListeEvenements = stringListeEvenements + "<p>Fuseau horaire local: " + evenementTimezone + "</p>";
+      stringListeEvenements = stringListeEvenements + "<p>Date et Heure (Fuseau horaire de québec): " + evenementDateHeureQuebec + "</p>";
       stringListeEvenements = stringListeEvenements + "<p>Description: " + evenementDescription + "</p>";
       stringListeEvenements = stringListeEvenements + "<p>Site web: " + evenementsiteWeb + "</p>";
       
@@ -148,7 +123,7 @@ function Liste()
       <button id="btn_rechercher" onClick={searchEvenements}>Rechercher</button>
       <button id="btn_annulerRecherche" onClick={showEvenements}>Annuler</button>
     </div>
-    
+    <p>Il est peut-être nécessaire de rafraîchir la page avec Ctrl+f5 pour afficher les derniers événements ajoutés.</p>
     <ul id='ulListeEvenements'>
       {Parser(stringListeEvenements)}
       
@@ -160,6 +135,32 @@ function Liste()
 
 function Creer()
 {
+  function handleSubmit(e) 
+  {
+    
+    e.preventDefault();
+
+    const evenement = {
+      evenementName: e.target.evenementName.value,
+      evenementDate: e.target.evenementDate.value,
+      evenementHour: e.target.evenementHour.value,
+      evenementTimezone: e.target.evenementTimezone.value,
+      evenementDateHourQuebec: e.target.evenementDateHourQuebec.value,
+      evenementDescription: e.target.evenementDescription.value,
+      evenementWebsite: e.target.evenementWebsite.value,
+      
+    };
+
+    axios
+      .post('/api/create', evenement)
+      .then(() => console.log('Evenement Created'))
+      .catch(err => {
+        console.error(err);
+      });
+
+      document.getElementById("idSuccessfulCreate").hidden = false;
+  };
+
   function selectTimePeriod()
   {
     var classNameToShow = "";
@@ -208,8 +209,15 @@ function Creer()
       var dateEvenementHeureQuebec = new Date(evenementDate + " " + evenementTime)
       var offsetDifference =  offsetTimezoneQuebec - offsetTimezoneEvenement;
       dateEvenementHeureQuebec.setTime(dateEvenementHeureQuebec.getTime() + (offsetDifference*60*60*1000));
-
-      document.getElementById('idDateEvenementQuebec').innerHTML = dateEvenementHeureQuebec;
+      var dateEvenementHeureQuebecFormatted = 
+        dateEvenementHeureQuebec.getFullYear() + "-" +
+        ("0" + (dateEvenementHeureQuebec.getMonth()+1)).slice(-2) + "-" +
+        ("0" + dateEvenementHeureQuebec.getDate()).slice(-2) + " " +
+        ("0" + dateEvenementHeureQuebec.getHours()).slice(-2) + "h " +
+        ("0" + dateEvenementHeureQuebec.getMinutes()).slice(-2);
+      
+      document.getElementById('idDateEvenementQuebecSpan').innerHTML = dateEvenementHeureQuebecFormatted;
+      document.getElementById('idDateEvenementQuebec').value = dateEvenementHeureQuebecFormatted;
     }
     else
     {
@@ -252,40 +260,41 @@ function Creer()
     <div className='creer'>
       <main>
         <h2>Créer événement</h2>
-        <form action="POST" id="CreerEvenement" >
+        <form  onSubmit={handleSubmit} id="CreerEvenement" >
           <p>
-              Nom de l'événement: <input type='text' id='idNomEvenement' required></input>
+              Nom de l'événement: <input type='text' id='idNomEvenement' name="evenementName" required></input>
           </p>
           <p>
-              Date de l'événement: <input type='date' id='idDateEvenement' onChange={calculateLocalHour} required></input>
+              Date de l'événement: <input type='date' id='idDateEvenement' name="evenementDate" onChange={calculateLocalHour} required></input>
           </p>
           <p>
-            <input type="radio" id="IsDST" name="fav_language" value="IsDST" onClick={selectTimePeriod}></input>
+            <input type="radio" id="IsDST" value="IsDST" name="DaylightSavingTimes" onClick={selectTimePeriod}></input>
             <label for="IsDST">Show Daylight Saving Times</label><br></br>
-            <input type="radio" id="NotDST" name="fav_language" value="NotDST" onClick={selectTimePeriod}></input>
+            <input type="radio" id="NotDST" value="NotDST" name="DaylightSavingTimes" onClick={selectTimePeriod}></input>
             <label for="NotDST">Show Standard Times</label>
           </p>
           <p>
               Fuseau horaire: 
-              <select id='idFuseauHoraire' onChange={calculateLocalHour}>
+              <select id='idFuseauHoraire' name="evenementTimezone" onChange={calculateLocalHour}>
                 {Parser(stringListeTimezones)}
               </select>
               
           </p>
           <p>
-              Heure de l'événement (heure locale <span id='idHeureLocaleType'></span>): <input type='time' id='idTimeLocalEvenement' required onChange={calculateLocalHour}></input> Exemple: 12:30 p.m.
+              Heure de l'événement (heure locale <span id='idHeureLocaleType'></span>): <input type='time' id='idTimeLocalEvenement' name="evenementHour" required onChange={calculateLocalHour}></input> Exemple: 12:30 p.m.
           </p>
           <p>
-              Date et Heure de l'événement (heure de québec): <span id='idDateEvenementQuebec'>-</span>
+              Date et Heure de l'événement (heure de québec): <span id='idDateEvenementQuebecSpan'>-</span><input type="hidden" id="idDateEvenementQuebec" name="evenementDateHourQuebec" required></input>
           </p>
           <p>
-            URL de l'événement: <input type='text' id='idSiteWebEvenement' required></input>
+            URL de l'événement: <input type='text' id='idSiteWebEvenement' name="evenementWebsite" required></input>
           </p>
           <p>
-            Description: <textarea  id="idDescription"></textarea >
+            Description: <textarea  id="idDescription" name="evenementDescription"></textarea >
           </p>
           <button>Créer événement</button>
         </form>
+        <p id="idSuccessfulCreate" hidden>L'événement a été créé avec succès. <NavLink exact activeClassName="current" to='/liste'>Liste événements</NavLink></p>
         <div id="prefooter"></div>
       </main>
     </div>
@@ -296,7 +305,6 @@ const Main = () => (
     <Route exact path='/' element={<Home/>}></Route>
     <Route exact path='/liste' element={Liste()}></Route>
     <Route exact path='/creer' element={Creer()}></Route>
-    <Route exact path='/creerEvenement' element={CreerEvenement()}></Route>
   </Routes>
 );
 
